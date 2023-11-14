@@ -42,13 +42,6 @@ class DeviceListView(APIView):
         serializer = DeviceSerializer(devices, many=True)
         return Response(serializer.data)
 
-# class DeviceByUid(APIView):
-#     def get(self, request, id):
-#         print(id)
-#         devices = device.objects.filter(uid=id)
-#         print(devices)
-#         serializer = deviceSerializer(devices, many=True)
-#         return Response(serializer.data)
 
 class DeviceByUid(generics.RetrieveAPIView):
     queryset = device.objects.all()
@@ -82,29 +75,6 @@ class temperatureList(APIView):
         else:
             return HttpResponse("No Device Found with this Entered Id")
    
-
-# class temperatureList(generics.ListAPIView):
-#     serializer_class = temperatureSerializer
-
-#     def get_queryset(self):
-#         queryset = tempratureReading.objects.all()
-#         print(queryset)
-
-#         # Get device ID, temperature, start date, and end date from query parameters
-#         device_id = self.request.query_params.get('device_id', None)
-#         temp = self.request.query_params.get('temp', None)
-#         start_date = self.request.query_params.get('start_date', None)
-#         end_date = self.request.query_params.get('end_date', None)
-
-#         # Apply filters based on query parameters
-#         if device_id is not None:
-#             queryset = queryset.filter(uid=device_id)
-#         if temp is not None:
-#             queryset = queryset.filter(temp=temp)
-#         if start_date is not None and end_date is not None:
-#             queryset = queryset.filter(date__range=[start_date, end_date])
-
-#         return queryset
 
 
 class humidityAdd(APIView):
@@ -159,11 +129,11 @@ class TemperatureHumidityGraphView(generics.RetrieveAPIView):
         humidity_dates = [entry['Date'] for entry in humidity_data]
 
         # Plotting
-        plt.figure(figsize=(10,4))
-        plt.plot(temperature_dates, temperature_values, label='Temperature')
-        plt.plot(humidity_dates, humidity_values, label='Humidity' )
+        plt.figure(figsize=(10,6))
+        plt.plot(temperature_dates, temperature_values, label='Temperature', marker='o')
+        plt.plot(humidity_dates, humidity_values, label='Humidity' ,  marker='o')
         plt.xlabel('Date')
-        plt.ylabel('vlaues')
+        plt.ylabel('Temperature and Humidity')
         plt.legend()
         plt.title('Temperature and Humidity vs. Time')
         plt.xticks(rotation=45)
